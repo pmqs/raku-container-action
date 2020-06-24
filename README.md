@@ -20,3 +20,34 @@ jobs:
 ```
 
 See it in action, for instance in [this repo](https://github.com/JJ/perl6-unicode-security/actions)
+
+
+If you need need finer control over the build 
+
+```yaml
+name: Linux build
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: jjmerelo/alpine-raku:latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Raku version
+      run: raku -v
+    - name: Install zip
+      run: |
+          apk add zip
+          zip -v
+    - name: Install unzip
+      run: |
+        apk add unzip
+        unzip -v
+    - name: Install dependencies
+      run: zef install --deps-only .
+    - name: Run tests
+      run: zef test --verbose .
+```
